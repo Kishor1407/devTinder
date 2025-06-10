@@ -1,42 +1,38 @@
 const express = require("express");
-const connectDB =require("./config/database");
+const connectDB = require("./config/database");
 
 const app = express();
-const User= require("./models/user");
+const User = require("./models/user");
 
-app.post("/signup", (req,res)=>{
-    const userObj = {
-        firstName:"Virat",
-        lastName:"Kumar",
-        emailId:"Virat123@gmail.com",
-        password:"Virat@123",
-    }
- 
-    //Creating a new instance of user model
-    const user = new User(userObj);
+app.post("/signup", (req, res) => {
+  const userObj = {
+    firstName: "Virat",
+    lastName: "Kumar",
+    emailId: "Virat123@gmail.com",
+    password: "Virat@123",
+  };
 
+  //Creating a new instance of user model
+  const user = new User(userObj);
+  try {
     user.save();
-    res.send("User Added Successfully!!")
-})
-
-
+    res.send("User Added Successfully!!");
+  } catch (err) {
+    res.status(400).send("Error Error Error");
+  }
+});
 
 connectDB()
-.then(()=>{
-    console.log("Database Connect Successfully")
-    
-app.listen(8000, () => {
-  console.log("Server is successfully listening on port 8000....");
-});
-})
-.catch(err=>{
-    console.error("Database Connection Failed")
-})
+  .then(() => {
+    console.log("Database Connect Successfully");
 
-
-
-
-
+    app.listen(8000, () => {
+      console.log("Server is successfully listening on port 8000....");
+    });
+  })
+  .catch((err) => {
+    console.error("Database Connection Failed");
+  });
 
 // const { adminAuth, userAuth } = require("./middlewares/auth");
 
@@ -47,7 +43,7 @@ app.listen(8000, () => {
 // app.use("/", (err, req, res) => {
 //  if(err){
 //     //Log errors
-//      res.status(500).send("Something went wrong");  
+//      res.status(500).send("Something went wrong");
 //  }
 // });
 
@@ -75,7 +71,7 @@ app.listen(8000, () => {
 // });
 
 // app.get("/user", userAuth, (req, res, next) => {
-//   res.send("All Users");  
+//   res.send("All Users");
 // });
 
 // app.get("/admin/getAllData", (req, res, next) => {
@@ -85,7 +81,6 @@ app.listen(8000, () => {
 // app.get("/admin/deleteData", (req, res, next) => {
 //   res.send("All Data 1 Deleted");
 // });
-
 
 // app.get("/admin/getAllData", (req,res,next)=>{
 //     //Logic of Fetching Data
@@ -111,8 +106,6 @@ app.listen(8000, () => {
 //         res.status(401).send("Unauthrosied Result")
 //     }
 // });
-
-
 
 // Route Handlers and Middlewares
 
