@@ -1,6 +1,41 @@
 const express = require("express");
+const connectDB =require("./config/database");
 
 const app = express();
+const User= require("./models/user");
+
+app.post("/signup", (req,res)=>{
+    const userObj = {
+        firstName:"Virat",
+        lastName:"Kumar",
+        emailId:"Virat123@gmail.com",
+        password:"Virat@123",
+    }
+ 
+    //Creating a new instance of user model
+    const user = new User(userObj);
+
+    user.save();
+    res.send("User Added Successfully!!")
+})
+
+
+
+connectDB()
+.then(()=>{
+    console.log("Database Connect Successfully")
+    
+app.listen(8000, () => {
+  console.log("Server is successfully listening on port 8000....");
+});
+})
+.catch(err=>{
+    console.error("Database Connection Failed")
+})
+
+
+
+
 
 
 // const { adminAuth, userAuth } = require("./middlewares/auth");
@@ -9,27 +44,22 @@ const app = express();
 
 // if we want to do auth and send response on each call we cant write condition in every routeHabdlers so thts why w ehave middlewares
 
-app.use("/", (err, req, res) => {
- if(err){
-    //Log errors
-     res.status(500).send("Something went wrong");  
- }
-});
+// app.use("/", (err, req, res) => {
+//  if(err){
+//     //Log errors
+//      res.status(500).send("Something went wrong");  
+//  }
+// });
 
-app.get("/admin/getAllData", (req, res) => {
-  try{
-    throw new Error("sdf");
-    res.send("USERRRR")
-  }
-  catch(err){
-    res.status(500).send("ERROR");
-  }
-});
-
-app.listen(8000, () => {
-  console.log("Server is successfully listening on port 8000....");
-});
-
+// app.get("/admin/getAllData", (req, res) => {
+//   try{
+//     throw new Error("sdf");
+//     res.send("USERRRR")
+//   }
+//   catch(err){
+//     res.status(500).send("ERROR");
+//   }
+// });
 
 // app.get("/admin", (req, res, next) => {
 //   //Logic of Fetching Data
