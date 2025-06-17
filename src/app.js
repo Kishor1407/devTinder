@@ -1,96 +1,19 @@
 const express = require("express");
 const connectDB = require("./config/database");
-const bcrypt = require("bcrypt");
 const app = express();
-const User = require("./models/user");
-const { validateSignUpData } = require("./utils/validation");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
-const {userAuth} = require("./middlewares/auth");
+
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.post("/signup", async (req, res) => {
-  // console.log(req.body);
-  validateSignUpData(req);
-  const { firstName, lastName, emailId, password, skills } = req.body;
-  const passwordHash = await bcrypt.hash(password, 10);
-  console.log(passwordHash);
-  const user = new User({
-    firstName,
-    lastName,
-    emailId,
-    password: passwordHash,
-    skills,
-  });
-  try {
-    await user.save();
-    res.send("User Added Successfully!!");
-  } catch (err) {
-    res.status(400).send("Error Error Error" + err.message);
-  }
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestsRouter = require("./routes/request");
 
-  //   const userObj = {
-  //     firstName: "Virat",
-  //     lastName: "Kumar",
-  //     emailId: "Virat123@gmail.com",
-  //     password: "Virat@123",
-  //   };
-
-  //   //Creating a new instance of user model
-  //   const user = new User(userObj);
-  //   try {
-  //     user.save();
-  //     res.send("User Added Successfully!!");
-  //   } catch (err) {
-  //     res.status(400).send("Error Error Error");
-  //   }
-});
-
-app.post("/login", async (req, res) => {
-  try {
-    const { emailId, password } = req.body;
-
-    const user = await User.findOne({ emailId: emailId });
-    if (!user) {
-      throw new Error("Invalid Credentials");
-    }
-
-    const isPasswordvalid = await user.validatePassword(password);
-
-    if (isPasswordvalid) {
-      const token = await user.getJWT();
-      res.cookie("token", token,{
-        expires: new Date(Date.now() + 8 * 3600000)
-      });
-
-      res.send(" User Login Success");
-    } else {
-      throw new Error(" Invalid Credentials");
-    }
-  } catch (err) {
-    res.status(400).send("Errooor" + err.message);
-  }
-});
-
-app.get("/profile", userAuth, async (req, res) => {
-
-  try {
-
-    const user = req.user;
-    res.send(user);
-  } catch (err) {
-    res.status(400).send("Something went wrong Token!!!!!");
-  }
-});
-
-app.post("/sendConnectionRequest",userAuth , async (req,res)=>{
-    console.log("Sending a connection Request");
-    const user=req.user;
-    res.send(user.firstName  + "  Sent Connection Request !!");
-
-})
+app.use("/",authRouter);
+app.use("/",profileRouter);
+app.use("/",requestsRouter);
 
 
 connectDB()
@@ -104,10 +27,6 @@ connectDB()
   .catch((err) => {
     console.error("Database Connection Failed", err);
   });
-
-
-
-
 
 //   Learning APi's
 // const { adminAuth, userAuth } = require("./middlewares/auth");
@@ -226,8 +145,6 @@ connectDB()
 //     res.send("Hello from the server Hello!");
 
 // })
-
-
 
 // Learning API'S
 // app.get("/user", async (req, res) => {
