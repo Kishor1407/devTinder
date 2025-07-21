@@ -47,11 +47,11 @@ const userSchema = new mongoose.Schema(
     photoUrl: {
       type: String,
       default:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fman&psig=AOvVaw2zJfKUYtPMiDWPYLvhs4Ad&ust=1749879532198000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIDx5rDX7Y0DFQAAAAAdAAAAABAE",
+        "https://static.vecteezy.com/system/resources/thumbnails/007/033/146/small_2x/profile-icon-login-head-icon-vector.jpg",
     },
     about: {
       type: String,
-      default: "I am Default of Default",
+      default: "I am Default about",
     },
     skills: {
       type: [String],

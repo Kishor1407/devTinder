@@ -7,19 +7,29 @@ const bcrypt = require("bcrypt");
 
 authRouter.post("/signup", async (req, res) => {
   validateSignUpData(req);
-  const { firstName, lastName, emailId, password, skills } = req.body;
+  const { firstName, lastName, emailId, password, age, gender, about, photoUrl, skills } = req.body;
   const passwordHash = await bcrypt.hash(password, 10);
   console.log(passwordHash);
   const user = new User({
     firstName,
     lastName,
     emailId,
+    age,
+    gender,
+    about,
+    photoUrl,
     password: passwordHash,
     skills,
   });
   try {
-    await user.save();
-    res.send("User Added Successfully!!");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+
+
+    res.send({message:"User Added Successfully!!",data:savedUser});
   } catch (err) {
     res.status(400).send("Error Error Error" + err.message);
   }
@@ -42,7 +52,7 @@ authRouter.post("/login", async (req, res) => {
         expires: new Date(Date.now() + 8 * 3600000),
       });
 
-      res.send(" User Login Success");
+      res.send(user);
     } else {
       throw new Error(" Invalid Credentials");
     }
