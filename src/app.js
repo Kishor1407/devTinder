@@ -4,6 +4,8 @@ const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require('http');
+const initializeSocket = require('./utils/socket');
 
 app.use(cors({
   origin:"http://localhost:5173",
@@ -22,12 +24,16 @@ app.use("/", profileRouter);
 app.use("/", requestsRouter);
 app.use("/", userRouter);
 
+const server = http.createServer(app);
+initializeSocket(server);
+
+
 
 connectDB()
   .then(() => {
     console.log("Database Connect Successfully");
 
-    app.listen(8000, () => {
+    server.listen(8000, () => {
       console.log("Server is successfully listening on port 8000....");
     });
   })
