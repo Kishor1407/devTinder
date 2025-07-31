@@ -18,7 +18,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     }
 
     const loggedInUser = req.user;
-    console.log("Before", loggedInUser);
+    // console.log("Before", loggedInUser);
 
     // loggedInUser.firstName = req.body.firstName;
     // loggedInUser.lastName = req.body.lastName;
@@ -29,7 +29,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
       message: `${loggedInUser.firstName},your profile updated successfully`,
       data: loggedInUser,
     });
-    console.log("After", loggedInUser);
+    // console.log("After", loggedInUser);
 
     // res.send(`${loggedInUser.firstName} your Profile Updated Successfully`)
   } catch (err) {

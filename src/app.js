@@ -1,14 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/database");
-const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require('http');
 const initializeSocket = require('./utils/socket');
+const app = express();
+
 
 app.use(cors({
-  origin:"http://localhost:5173",
+  origin:["http://localhost:5173" , "http://localhost:5174"],
   credentials:true,
 }));
 app.use(express.json());
@@ -18,11 +19,15 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestsRouter = require("./routes/request");
 const userRouter = require("./routes/user");
+const chatRouter = require("./routes/chat");
+
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestsRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
+
 
 const server = http.createServer(app);
 initializeSocket(server);

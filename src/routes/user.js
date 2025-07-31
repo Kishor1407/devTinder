@@ -33,7 +33,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       .populate("fromUserId", "firstName  lastname age gender about photoUrl")
       .populate("toUserId", "firstName lastname age gender about photoUrl");
 
-    console.log(connectionRequests);
+    // console.log(connectionRequests);
 
     const data = connectionRequests.map((row) => {
       if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
@@ -80,7 +80,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         hideUsersFromFeed.add(req.toUserId.toString());
 
     })
-console.log(hideUsersFromFeed);
+// console.log(hideUsersFromFeed);
 
 const users = await User.find({
    $and:[{ _id:{$nin: Array.from(hideUsersFromFeed)}},
